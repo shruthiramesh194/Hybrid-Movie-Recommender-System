@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Recommender System v3.1</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<section id="movie-recommendation-system-using-scikit-learn" class="cell markdown">
+<h1>Movie Recommendation System Using Scikit-Learn</h1>
+<p>There are many types of recommender systems:</p>
+<ul>
+<li><strong>Collaborative filtering</strong> : The main idea behind these methods is to use other users’ preferences and taste to recommend new items to a user. The usual procedure is to find similar users (or items) to recommend new items which were liked by those users, and which presumably will also be liked by the user being recommended.</li>
+<li><strong>Content-Based filtering</strong> : Content-based filtering methods are based on a description of the item and a profile of the user's preferences.</li>
+<li><strong>Hybrid</strong> : Includes techniques combining collaborative filtering, content based and other possible approaches. Nowadays most recommender systems are hybrid.</li>
+</ul>
+<h3 id="our-movie-recommender-system">Our Movie Recommender System</h3>
+<p>We are using a hybrid approach in our recommender system - content-based filtering using a TF-IDF vectorizer and then Collaborative filtering using Nearest Neighbor Algorithm to make movie recommendations.</p>
+<h4 id="the-movielens-dataset">The Movielens Dataset</h4>
+<p>The dataset can be found here - <a href="https://grouplens.org/datasets/movielens/" class="uri">https://grouplens.org/datasets/movielens/</a></p>
+</section>
+<div class="cell markdown">
+<hr />
+</div>
+<section id="import-packages-and-read-the-data" class="cell markdown">
+<h3>Import packages and read the data</h3>
+</section>
+<div class="cell code" data-execution_count="1">
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">&#39;ignore&#39;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">&#39;display.max_colwidth&#39;</span>, <span class="va">None</span>) <span class="co"># don&#39;t truncate the columns of the data frame while printing</span></span></code></pre></div>
+</div>
+<div class="cell code" data-execution_count="2">
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ratings <span class="op">=</span> pd.read_csv(<span class="st">&#39;rating.csv&#39;</span>)</span></code></pre></div>
+</div>
+<div class="cell code" data-execution_count="3">
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ratings.head()</span></code></pre></div>
+<div class="output execute_result" data-execution_count="3">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>userId</th>
+      <th>movieId</th>
+      <th>rating</th>
+      <th>timestamp</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>2</td>
+      <td>3.5</td>
+      <td>2005-04-02 23:53:47</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>29</td>
+      <td>3.5</td>
+      <td>2005-04-02 23:31:16</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1</td>
+      <td>32</td>
+      <td>3.5</td>
+      <td>2005-04-02 23:33:39</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>47</td>
+      <td>3.5</td>
+      <td>2005-04-02 23:32:07</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1</td>
+      <td>50</td>
+      <td>3.5</td>
+      <td>2005-04-02 23:29:40</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell code" data-execution_count="4">
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>movies <span class="op">=</span> pd.read_csv(<span class="st">&#39;movie.csv&#39;</span>, index_col<span class="op">=</span><span class="st">&#39;movieId&#39;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>movies.head()</span></code></pre></div>
+<div class="output execute_result" data-execution_count="4">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>title</th>
+      <th>genres</th>
+    </tr>
+    <tr>
+      <th>movieId</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>Toy Story (1995)</td>
+      <td>Adventure|Animation|Children|Comedy|Fantasy</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Jumanji (1995)</td>
+      <td>Adventure|Children|Fantasy</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Grumpier Old Men (1995)</td>
+      <td>Comedy|Romance</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Waiting to Exhale (1995)</td>
+      <td>Comedy|Drama|Romance</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Father of the Bride Part II (1995)</td>
+      <td>Comedy</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell markdown">
+<hr />
+</div>
+<section id="manipulating-the-genres-column" class="cell markdown">
+<h3>Manipulating the Genres column</h3>
+<p><strong>Genres are present with a '|' delimiter which will cause problems as we start applying ML Models. Thus, we change it to string type and comma separated entity</strong></p>
+</section>
+<div class="cell code" data-execution_count="5">
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Break up the big genre string into a string array</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>movies[<span class="st">&#39;genres&#39;</span>] <span class="op">=</span> movies[<span class="st">&#39;genres&#39;</span>].<span class="bu">str</span>.split(<span class="st">&#39;|&#39;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert genres to string value</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>movies[<span class="st">&#39;genres&#39;</span>] <span class="op">=</span> movies[<span class="st">&#39;genres&#39;</span>].fillna(<span class="st">&quot;&quot;</span>).astype(<span class="st">&#39;str&#39;</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>movies.head()</span></code></pre></div>
+<div class="output execute_result" data-execution_count="5">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>title</th>
+      <th>genres</th>
+    </tr>
+    <tr>
+      <th>movieId</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>Toy Story (1995)</td>
+      <td>['Adventure', 'Animation', 'Children', 'Comedy', 'Fantasy']</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Jumanji (1995)</td>
+      <td>['Adventure', 'Children', 'Fantasy']</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Grumpier Old Men (1995)</td>
+      <td>['Comedy', 'Romance']</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Waiting to Exhale (1995)</td>
+      <td>['Comedy', 'Drama', 'Romance']</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Father of the Bride Part II (1995)</td>
+      <td>['Comedy']</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell code" data-execution_count="6">
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>movies.shape</span></code></pre></div>
+<div class="output execute_result" data-execution_count="6">
+<pre><code>(27278, 2)</code></pre>
+</div>
+</div>
+<div class="cell markdown">
+<hr />
+</div>
+<section id="create-a-dataset-like-movies-but-with-natural-indices-starting-from-0" class="cell markdown">
+<h5>Create a dataset like 'movies' but with natural indices starting from 0</h5>
+</section>
+<div class="cell code" data-execution_count="7">
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>movies_genre <span class="op">=</span> movies.reset_index()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>movies_genre.head()</span></code></pre></div>
+<div class="output execute_result" data-execution_count="7">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>movieId</th>
+      <th>title</th>
+      <th>genres</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>Toy Story (1995)</td>
+      <td>['Adventure', 'Animation', 'Children', 'Comedy', 'Fantasy']</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>Jumanji (1995)</td>
+      <td>['Adventure', 'Children', 'Fantasy']</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>Grumpier Old Men (1995)</td>
+      <td>['Comedy', 'Romance']</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>Waiting to Exhale (1995)</td>
+      <td>['Comedy', 'Drama', 'Romance']</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>Father of the Bride Part II (1995)</td>
+      <td>['Comedy']</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell markdown">
+<hr />
+</div>
+<section id="content-based-recommendations" class="cell markdown">
+<h2>Content Based Recommendations</h2>
+<p><strong>Analyzing the contents of the movie such as genre and getting movies with similar content by ranking the similarity scores calculated using the Linear_kernel function in Scikit-Learn.</strong></p>
+<p>TF-IDF refers to Term Frequency-Inverse Document Frequency. TF is simply the frequency a word appears in a document. IDF is the inverse of the document frequency in the whole corpus of documents. The idea behind the TF-IDF is to dampen the effect of high-frequency words in determining the importance of an item.</p>
+<p>The fewer movies that contain a given genre the higher the resulting weight.</p>
+</section>
+<div class="cell markdown">
+<hr />
+</div>
+<section id="use-the-tf-idf-vectorizer-from-scikit-learn-to-vectorize-genres" class="cell markdown">
+<h4>Use the TF-IDF Vectorizer from scikit-learn to vectorize genres.</h4>
+<p>Vectorization helps to implement ML models on text based features. In simple terms, TF-IDF vectorizer converts strings into vectors based on their frequency. Words with higher frequency are penalized, this helps in segregating important words from connecting words like 'the', 'is', 'in' etc.</p>
+<h5 id="tf-idf-vectorizer-parameter"><em>TF-IDF Vectorizer parameter</em></h5>
+<ul>
+<li><strong>analyzer</strong> = 'word';Feature is made of word ngram</li>
+<li><strong>ngram_range</strong> = (1,2);(1, 2) means unigrams and bigrams</li>
+<li><strong>min_df</strong> = 0;Ignores terms that have a document frequency strictly lower than 0</li>
+<li><strong>stop_words</strong> = 'english';‘english’ is currently the only supported string value</li>
+</ul>
+</section>
+<div class="cell code" data-execution_count="8">
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> TfidfVectorizer</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>tf <span class="op">=</span> TfidfVectorizer(analyzer<span class="op">=</span><span class="st">&#39;word&#39;</span>,ngram_range<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">2</span>),min_df<span class="op">=</span><span class="dv">0</span>, stop_words<span class="op">=</span><span class="st">&#39;english&#39;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>genre_matrix <span class="op">=</span> tf.fit_transform(movies_genre[<span class="st">&#39;genres&#39;</span>])</span></code></pre></div>
+</div>
+<div class="cell markdown">
+<hr />
+</div>
+<section id="using-scikit-learns-linear_kernel-function-to-generate-cosine-distances-of-the-genre-matrix" class="cell markdown">
+<h5><strong>Using scikit-learn's linear_kernel function to generate cosine distances of the genre-matrix</strong></h5>
+<p>Though scikit-learn comes with cosine-similarity module, in this case we can simply calculate the cosine distances using dot product of the matrix with itself. linear_kernel function is faster than cosine-similarity function for performing dot product operations.</p>
+</section>
+<div class="cell code" data-execution_count="9">
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics.pairwise <span class="im">import</span> linear_kernel</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>dis_cosine <span class="op">=</span> linear_kernel(genre_matrix, genre_matrix)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>titles <span class="op">=</span> movies_genre[<span class="st">&#39;title&#39;</span>]</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>idx <span class="op">=</span> pd.Series(movies_genre.index, index<span class="op">=</span>movies_genre[<span class="st">&#39;title&#39;</span>])</span></code></pre></div>
+</div>
+<div class="cell markdown">
+<hr />
+</div>
+<section id="importing-and-initializing-scikit-learns-nearest-neighbors-to-find-closest-matches-using-movie-ratings" class="cell markdown">
+<h3>Importing and initializing scikit-learn's Nearest Neighbors to find closest matches using movie-ratings</h3>
+<p>In the earlier steps, we created a means to create a cosine-similarity matrix based on genres. Now, we will use Nearest Neighbors with cosine-similarity metric to find movies similar to each other based on user ratings.</p>
+<p>We will combine results from both approaches to build the recommendation system that recommends similar movies based on genre as well as user ratings. In simple terms, <strong>The Best of both Worlds</strong></p>
+<h5 id="model-parameters">Model parameters</h5>
+<ul>
+<li><strong>n_neighbors</strong> = 10; Model will suggest 10 most similar movies</li>
+<li><strong>algorithm</strong> = auto; Algorithm used to search for similar movies</li>
+<li><strong>metric</strong> = cosine; Model will use cosine distance between movies to judge similarity</li>
+<li><strong>n_jobs</strong> = -1; Number of parallel jobs used for search(-1 will use all processors)</li>
+</ul>
+</section>
+<div class="cell code" data-execution_count="10">
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> NearestNeighbors</span></code></pre></div>
+</div>
+<div class="cell code" data-execution_count="11">
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> NearestNeighbors(n_neighbors<span class="op">=</span><span class="dv">11</span>, algorithm<span class="op">=</span><span class="st">&#39;auto&#39;</span>, metric<span class="op">=</span><span class="st">&#39;cosine&#39;</span>, n_jobs <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>)</span></code></pre></div>
+</div>
+<div class="cell markdown">
+<hr />
+</div>
+<section id="function-to-combine-both-models-and-recommend-movies" class="cell markdown">
+<h3>Function to combine both Models and recommend movies</h3>
+<h5 id="working-of-the-function">Working of the Function:</h5>
+<ul>
+<li><p>Function takes in title of the movie as input.</p></li>
+<li><p>It maps index of the movie from idx dataset created during the vectorizer process</p></li>
+<li><p>It unstacks the sparse matrix of cosine distances, sorts them in Descending order and takes first 100 movies</p></li>
+<li><p>It finds those indices in movie_genre dataset and the resulting dataset is merged(inner join on 'movieId') with ratings dataset. We make sure the input movie is always contained in the resulting dataset.</p></li>
+<li><p>It creates a pivot table with index as movie titles, columns as reviewer's User IDs and values as ratings. We impute nulls as 0 for efficient processing.</p></li>
+<li><p>Nearest Neighbors model is fitted on the pivot table of movies-ratings.</p></li>
+<li><p>Then we use KNeighbors function of the model to find 10 best matches. Suggestions Data Frame is returned that contains Suggested Movie Titles and their Genres</p></li>
+</ul>
+</section>
+<div class="cell code" data-execution_count="12">
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recommend(title):</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    index <span class="op">=</span> idx[title]</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> <span class="bu">list</span>(<span class="bu">enumerate</span>(dis_cosine[index]))</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> <span class="bu">sorted</span>(scores, key<span class="op">=</span><span class="kw">lambda</span> x: x[<span class="dv">1</span>], reverse<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> scores[<span class="dv">1</span>:<span class="dv">101</span>]</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    movie_indices <span class="op">=</span> [i[<span class="dv">0</span>] <span class="cf">for</span> i <span class="kw">in</span> scores]</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    movie_indices.append(index)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    genre_recommend <span class="op">=</span> movies_genre.iloc[movie_indices]</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    movies_suggested <span class="op">=</span> genre_recommend.merge(ratings, on<span class="op">=</span><span class="st">&#39;movieId&#39;</span>, how<span class="op">=</span><span class="st">&#39;inner&#39;</span>)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    pivot_movies <span class="op">=</span> movies_suggested.pivot_table(index <span class="op">=</span> <span class="st">&#39;title&#39;</span>, columns<span class="op">=</span><span class="st">&#39;userId&#39;</span>, values <span class="op">=</span> <span class="st">&#39;rating&#39;</span>).fillna(<span class="dv">0</span>)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    model.fit(pivot_movies)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    suggest <span class="op">=</span> model.kneighbors(pivot_movies.loc[title, :].values.reshape(<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>))[<span class="dv">1</span>]</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    suggested <span class="op">=</span> pd.DataFrame(pivot_movies.index[suggest].reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>), columns<span class="op">=</span>[<span class="st">&#39;title&#39;</span>])</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    suggestions <span class="op">=</span> suggested.merge(movies, on<span class="op">=</span><span class="st">&#39;title&#39;</span>, how<span class="op">=</span><span class="st">&#39;inner&#39;</span>)</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> suggestions</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    </span></code></pre></div>
+</div>
+<div class="cell markdown">
+<hr />
+</div>
+<div class="cell code" data-execution_count="13">
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>recommend(<span class="st">&#39;Five Children and It (2004)&#39;</span>)</span></code></pre></div>
+<div class="output execute_result" data-execution_count="13">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>title</th>
+      <th>genres</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Five Children and It (2004)</td>
+      <td>['Adventure', 'Children', 'Fantasy']</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>The Search for Santa Paws (2010)</td>
+      <td>['Adventure', 'Children']</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Napoleon (1995)</td>
+      <td>['Adventure', 'Children']</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Fishtales (2008)</td>
+      <td>['Children', 'Fantasy']</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Back to the Secret Garden (2001)</td>
+      <td>['Adventure', 'Children', 'Fantasy']</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Snow Queen (2002)</td>
+      <td>['Adventure', 'Children', 'Fantasy']</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Thief Lord, The (2006)</td>
+      <td>['Adventure', 'Children', 'Fantasy']</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Standing Up (2013)</td>
+      <td>['Adventure', 'Children']</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Chronicles of Narnia: The Voyage of the Dawn Treader, The (2010)</td>
+      <td>['Adventure', 'Children', 'Fantasy']</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Borrowers, The (2011)</td>
+      <td>['Adventure', 'Children', 'Fantasy']</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Adventures of Sharkboy and Lavagirl 3-D, The (2005)</td>
+      <td>['Action', 'Adventure', 'Children', 'Fantasy']</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell markdown">
+<hr />
+</div>
+<div class="cell code" data-execution_count="14">
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>recommend(<span class="st">&#39;Scarface (1983)&#39;</span>)</span></code></pre></div>
+<div class="output execute_result" data-execution_count="14">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>title</th>
+      <th>genres</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Scarface (1983)</td>
+      <td>['Action', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Untouchables, The (1987)</td>
+      <td>['Action', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Swordfish (2001)</td>
+      <td>['Action', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Colors (1988)</td>
+      <td>['Action', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Black Rain (1989)</td>
+      <td>['Action', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Menace II Society (1993)</td>
+      <td>['Action', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Four Brothers (2005)</td>
+      <td>['Action', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>New Jack City (1991)</td>
+      <td>['Action', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Death Wish (1974)</td>
+      <td>['Action', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Harley Davidson and the Marlboro Man (1991)</td>
+      <td>['Action', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Above the Law (1988)</td>
+      <td>['Action', 'Crime', 'Drama']</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell markdown">
+<hr />
+</div>
+<div class="cell code" data-execution_count="15">
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>recommend(<span class="st">&quot;Captain Phillips (2013)&quot;</span>)</span></code></pre></div>
+<div class="output execute_result" data-execution_count="15">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>title</th>
+      <th>genres</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Captain Phillips (2013)</td>
+      <td>['Adventure', 'Drama', 'Thriller', 'IMAX']</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Skyfall (2012)</td>
+      <td>['Action', 'Adventure', 'Thriller', 'IMAX']</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Contagion (2011)</td>
+      <td>['Sci-Fi', 'Thriller', 'IMAX']</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Mission: Impossible - Ghost Protocol (2011)</td>
+      <td>['Action', 'Adventure', 'Thriller', 'IMAX']</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Iron Man 3 (2013)</td>
+      <td>['Action', 'Sci-Fi', 'Thriller', 'IMAX']</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Bourne Legacy, The (2012)</td>
+      <td>['Action', 'Adventure', 'Drama', 'Thriller', 'IMAX']</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>127 Hours (2010)</td>
+      <td>['Adventure', 'Drama', 'Thriller']</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Super 8 (2011)</td>
+      <td>['Mystery', 'Sci-Fi', 'Thriller', 'IMAX']</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>White House Down (2013)</td>
+      <td>['Action', 'Drama', 'Thriller', 'IMAX']</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Jack Ryan: Shadow Recruit (2014)</td>
+      <td>['Action', 'Drama', 'Thriller', 'IMAX']</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Iron Man 2 (2010)</td>
+      <td>['Action', 'Adventure', 'Sci-Fi', 'Thriller', 'IMAX']</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell markdown">
+<hr />
+</div>
+<div class="cell code" data-execution_count="16">
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>recommend(<span class="st">&quot;Pulp Fiction (1994)&quot;</span>)</span></code></pre></div>
+<div class="output execute_result" data-execution_count="16">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>title</th>
+      <th>genres</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Pulp Fiction (1994)</td>
+      <td>['Comedy', 'Crime', 'Drama', 'Thriller']</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Fargo (1996)</td>
+      <td>['Comedy', 'Crime', 'Drama', 'Thriller']</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Trainspotting (1996)</td>
+      <td>['Comedy', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Bad Boys (1995)</td>
+      <td>['Action', 'Comedy', 'Crime', 'Drama', 'Thriller']</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Player, The (1992)</td>
+      <td>['Comedy', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Fried Green Tomatoes (1991)</td>
+      <td>['Comedy', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>In Bruges (2008)</td>
+      <td>['Comedy', 'Crime', 'Drama', 'Thriller']</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Matchstick Men (2003)</td>
+      <td>['Comedy', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Burn After Reading (2008)</td>
+      <td>['Comedy', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Confessions of a Dangerous Mind (2002)</td>
+      <td>['Comedy', 'Crime', 'Drama', 'Thriller']</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Crimes and Misdemeanors (1989)</td>
+      <td>['Comedy', 'Crime', 'Drama']</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell markdown">
+<hr />
+</div>
+<div class="cell code" data-execution_count="17">
+<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>recommend(<span class="st">&quot;Frozen (2013)&quot;</span>)</span></code></pre></div>
+<div class="output execute_result" data-execution_count="17">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>title</th>
+      <th>genres</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Frozen (2013)</td>
+      <td>['Adventure', 'Animation', 'Comedy', 'Fantasy', 'Musical', 'Romance']</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Monsters University (2013)</td>
+      <td>['Adventure', 'Animation', 'Comedy']</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Tangled (2010)</td>
+      <td>['Animation', 'Children', 'Comedy', 'Fantasy', 'Musical', 'Romance', 'IMAX']</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Croods, The (2013)</td>
+      <td>['Adventure', 'Animation', 'Comedy']</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>ParaNorman (2012)</td>
+      <td>['Adventure', 'Animation', 'Comedy']</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Puss in Boots (2011)</td>
+      <td>['Adventure', 'Animation', 'Comedy', 'Fantasy', 'IMAX']</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Scott Pilgrim vs. the World (2010)</td>
+      <td>['Action', 'Comedy', 'Fantasy', 'Musical', 'Romance']</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Princess and the Frog, The (2009)</td>
+      <td>['Animation', 'Children', 'Fantasy', 'Musical', 'Romance']</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Ice Age 4: Continental Drift (2012)</td>
+      <td>['Adventure', 'Animation', 'Comedy']</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Enchanted (2007)</td>
+      <td>['Adventure', 'Animation', 'Children', 'Comedy', 'Fantasy', 'Musical', 'Romance']</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Mr. Peabody &amp; Sherman (2014)</td>
+      <td>['Adventure', 'Animation', 'Comedy']</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell markdown">
+<hr />
+</div>
+<div class="cell code" data-execution_count="18">
+<div class="sourceCode" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>recommend(<span class="st">&quot;E.T. the Extra-Terrestrial (1982)&quot;</span>)</span></code></pre></div>
+<div class="output execute_result" data-execution_count="18">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>title</th>
+      <th>genres</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>E.T. the Extra-Terrestrial (1982)</td>
+      <td>['Children', 'Drama', 'Sci-Fi']</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Contact (1997)</td>
+      <td>['Drama', 'Sci-Fi']</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Truman Show, The (1998)</td>
+      <td>['Comedy', 'Drama', 'Sci-Fi']</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Babe (1995)</td>
+      <td>['Children', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Unbreakable (2000)</td>
+      <td>['Drama', 'Sci-Fi']</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Iron Giant, The (1999)</td>
+      <td>['Adventure', 'Animation', 'Children', 'Drama', 'Sci-Fi']</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Old Yeller (1957)</td>
+      <td>['Children', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Forbidden Planet (1956)</td>
+      <td>['Drama', 'Sci-Fi']</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Metropolis (1927)</td>
+      <td>['Drama', 'Sci-Fi']</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Powder (1995)</td>
+      <td>['Drama', 'Sci-Fi']</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>1984 (Nineteen Eighty-Four) (1984)</td>
+      <td>['Drama', 'Sci-Fi']</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell markdown">
+<hr />
+</div>
+<div class="cell code" data-execution_count="19">
+<div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>recommend(<span class="st">&quot;Psycho (1960)&quot;</span>)</span></code></pre></div>
+<div class="output execute_result" data-execution_count="19">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>title</th>
+      <th>genres</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Psycho (1960)</td>
+      <td>['Crime', 'Horror']</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Silence of the Lambs, The (1991)</td>
+      <td>['Crime', 'Horror', 'Thriller']</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>American Psycho (2000)</td>
+      <td>['Crime', 'Horror', 'Mystery', 'Thriller']</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>From Hell (2001)</td>
+      <td>['Crime', 'Horror', 'Mystery', 'Thriller']</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Psycho (1998)</td>
+      <td>['Crime', 'Horror', 'Thriller']</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Henry: Portrait of a Serial Killer (1986)</td>
+      <td>['Crime', 'Horror', 'Thriller']</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Identity (2003)</td>
+      <td>['Crime', 'Horror', 'Mystery', 'Thriller']</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Serial Mom (1994)</td>
+      <td>['Comedy', 'Crime', 'Horror']</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Book of Shadows: Blair Witch 2 (2000)</td>
+      <td>['Crime', 'Horror', 'Mystery', 'Thriller']</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Last House on the Left, The (1972)</td>
+      <td>['Crime', 'Horror', 'Thriller']</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>House of Wax (1953)</td>
+      <td>['Crime', 'Horror', 'Mystery', 'Thriller']</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell markdown">
+<hr />
+</div>
+<div class="cell code" data-execution_count="20">
+<div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>recommend(<span class="st">&quot;Saving Private Ryan (1998)&quot;</span>)</span></code></pre></div>
+<div class="output execute_result" data-execution_count="20">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>title</th>
+      <th>genres</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Saving Private Ryan (1998)</td>
+      <td>['Action', 'Drama', 'War']</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Apocalypse Now (1979)</td>
+      <td>['Action', 'Drama', 'War']</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Black Hawk Down (2001)</td>
+      <td>['Action', 'Drama', 'War']</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Patriot, The (2000)</td>
+      <td>['Action', 'Drama', 'War']</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Boot, Das (Boat, The) (1981)</td>
+      <td>['Action', 'Drama', 'War']</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Thin Red Line, The (1998)</td>
+      <td>['Action', 'Drama', 'War']</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Dirty Dozen, The (1967)</td>
+      <td>['Action', 'Drama', 'War']</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Inglourious Basterds (2009)</td>
+      <td>['Action', 'Drama', 'War']</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>We Were Soldiers (2002)</td>
+      <td>['Action', 'Drama', 'War']</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Longest Day, The (1962)</td>
+      <td>['Action', 'Drama', 'War']</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Jarhead (2005)</td>
+      <td>['Action', 'Drama', 'War']</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell markdown">
+<hr />
+</div>
+<div class="cell code" data-execution_count="21">
+<div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>recommend(<span class="st">&quot;Casablanca (1942)&quot;</span>)</span></code></pre></div>
+<div class="output execute_result" data-execution_count="21">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>title</th>
+      <th>genres</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Casablanca (1942)</td>
+      <td>['Drama', 'Romance']</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Breakfast at Tiffany's (1961)</td>
+      <td>['Drama', 'Romance']</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Good Will Hunting (1997)</td>
+      <td>['Drama', 'Romance']</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Titanic (1997)</td>
+      <td>['Drama', 'Romance']</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Room with a View, A (1986)</td>
+      <td>['Drama', 'Romance']</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Jerry Maguire (1996)</td>
+      <td>['Drama', 'Romance']</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Leaving Las Vegas (1995)</td>
+      <td>['Drama', 'Romance']</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Piano, The (1993)</td>
+      <td>['Drama', 'Romance']</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Shine (1996)</td>
+      <td>['Drama', 'Romance']</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Remains of the Day, The (1993)</td>
+      <td>['Drama', 'Romance']</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Quiet Man, The (1952)</td>
+      <td>['Drama', 'Romance']</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell markdown">
+<hr />
+</div>
+<div class="cell code" data-execution_count="22">
+<div class="sourceCode" id="cb23"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>recommend(<span class="st">&quot;Chicago (2002)&quot;</span>)</span></code></pre></div>
+<div class="output execute_result" data-execution_count="22">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>title</th>
+      <th>genres</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Chicago (2002)</td>
+      <td>['Comedy', 'Crime', 'Drama', 'Musical']</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Matchstick Men (2003)</td>
+      <td>['Comedy', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Trainspotting (1996)</td>
+      <td>['Comedy', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Fried Green Tomatoes (1991)</td>
+      <td>['Comedy', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Sexy Beast (2000)</td>
+      <td>['Comedy', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Death to Smoochy (2002)</td>
+      <td>['Comedy', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Paper Moon (1973)</td>
+      <td>['Comedy', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Burn After Reading (2008)</td>
+      <td>['Comedy', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Player, The (1992)</td>
+      <td>['Comedy', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Crimes and Misdemeanors (1989)</td>
+      <td>['Comedy', 'Crime', 'Drama']</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Dragnet (1987)</td>
+      <td>['Comedy', 'Crime', 'Drama']</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell markdown">
+<hr />
+</div>
+<div class="cell code" data-execution_count="23">
+<div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>recommend(<span class="st">&quot;Jumanji (1995)&quot;</span>)</span></code></pre></div>
+<div class="output execute_result" data-execution_count="23">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>title</th>
+      <th>genres</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Jumanji (1995)</td>
+      <td>['Adventure', 'Children', 'Fantasy']</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Casper (1995)</td>
+      <td>['Adventure', 'Children']</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Wizard of Oz, The (1939)</td>
+      <td>['Adventure', 'Children', 'Fantasy', 'Musical']</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Harry Potter and the Sorcerer's Stone (a.k.a. Harry Potter and the Philosopher's Stone) (2001)</td>
+      <td>['Adventure', 'Children', 'Fantasy']</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Indian in the Cupboard, The (1995)</td>
+      <td>['Adventure', 'Children', 'Fantasy']</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>NeverEnding Story, The (1984)</td>
+      <td>['Adventure', 'Children', 'Fantasy']</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Chronicles of Narnia: The Lion, the Witch and the Wardrobe, The (2005)</td>
+      <td>['Adventure', 'Children', 'Fantasy']</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Escape to Witch Mountain (1975)</td>
+      <td>['Adventure', 'Children', 'Fantasy']</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Swiss Family Robinson (1960)</td>
+      <td>['Adventure', 'Children']</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Tom and Huck (1995)</td>
+      <td>['Adventure', 'Children']</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>NeverEnding Story II: The Next Chapter, The (1990)</td>
+      <td>['Adventure', 'Children', 'Fantasy']</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell markdown">
+<hr />
+</div>
+</body>
+</html>
